@@ -4,13 +4,64 @@ const Core = {
     engine: null,
 
     async init() {
-        const res = await fetch('json/config.json');
-        this.config = await res.json();
-        this.engine = new Engine(document.getElementById('board-viewport'));
+        const bar = document.getElementById('loading-bar');
+        const status = document.getElementById('loader-status');
         
+        // Step 1: Progress Start
+        this.updateProgress(30, "BOOTING ENGINE...");
+
+        try {
+            // Step 2: Try to load JSON with a Timeout
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 sec timeout
+
+            const res = await fetch('json/config.json', { signal: controller.signal });
+            clearTimeout(timeoutId);
+
+            if (res.ok) {
+                this.config = await res.json();
+                this.updateProgress(70, "ASSETS SYNCED...");
+            } else {
+                throw new Error("Local config not found");
+            }
+        } catch (err) {
+            console.warn("Using Fallback Config (PWA Mode)");
+            // DEFAULT FALLBACK DATA (Agar file load nahi hui toh ye chalega)
+            this.config = {
+                presets: [
+                    "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800",
+                    "https://images.unsplash.com/photo-1633167606207-d840b5070fc2?q=80&w=800",
+                    "https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=800",
+                    "https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?q=80&w=800",
+                    "https://images.unsplash.com/photo-1574169208507-84376144848b?q=80&w=800"
+                ],
+                ratings: {
+                    "3": { "stars5": 25, "stars4": 40, "stars3": 60 },
+                    "4": { "stars5": 80, "stars4": 120, "stars3": 180 },
+                    "5": { "stars5": 150, "stars4": 250, "stars3": 400 },
+                    "7": { "stars5": 400, "stars4": 650, "stars3": 900 }
+                }
+            };
+        }
+
+        // Step 3: Initialize Components
+        this.engine = new Engine(document.getElementById('board-viewport'));
         this.setupListeners();
         this.updatePreview();
-        setTimeout(() => UI.nav('home'), 1500);
+
+        // Step 4: Finalize
+        this.updateProgress(100, "READY");
+
+        setTimeout(() => {
+            UI.nav('home');
+        }, 600);
+    },
+
+    updateProgress(percent, msg) {
+        const bar = document.getElementById('loading-bar');
+        const status = document.getElementById('loader-status');
+        if(bar) bar.style.width = percent + "%";
+        if(status) status.textContent = msg;
     },
 
     setupListeners() {
@@ -32,8 +83,6 @@ const Core = {
                 this.updatePreview();
             };
         });
-        
-        // Security: Disable context menu & dragging
         window.oncontextmenu = (e) => e.preventDefault();
     },
 
@@ -45,8 +94,12 @@ const Core = {
 
     updatePreview() {
         const p = document.getElementById('img-preview-container');
-        p.style.backgroundImage = this.state.mode === 'photo' ? `url(${this.config.presets[this.state.preset]})` : 'none';
-        p.style.background = this.state.mode === 'numbers' ? 'rgba(255,255,255,0.05)' : '';
+        if(this.state.mode === 'photo') {
+            p.style.backgroundImage = `url(${this.config.presets[this.state.preset]})`;
+        } else {
+            p.style.backgroundImage = 'none';
+            p.style.background = 'rgba(255,255,255,0.05)';
+        }
     },
 
     launchGame() {
@@ -59,7 +112,7 @@ const Core = {
     },
 
     startTimer() {
-        clearInterval(this.state.timer);
+        if(this.state.timer) clearInterval(this.state.timer);
         this.state.timer = setInterval(() => {
             this.state.time++;
             document.getElementById('val-time').textContent = UI.formatTime(this.state.time);
@@ -74,6 +127,10 @@ const Core = {
     handleWin() {
         clearInterval(this.state.timer);
         UI.showWin();
+    },
+
+    resetGame() {
+        this.launchGame();
     }
 };
 
