@@ -28,13 +28,13 @@ const Core = {
             console.warn("Using Fallback Config (PWA Mode)");
             // DEFAULT FALLBACK DATA (Agar file load nahi hui toh ye chalega)
             this.config = {
-                presets: [
-                    "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800",
-                    "https://images.unsplash.com/photo-1633167606207-d840b5070fc2?q=80&w=800",
-                    "https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=800",
-                    "https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?q=80&w=800",
-                    "https://images.unsplash.com/photo-1574169208507-84376144848b?q=80&w=800"
-                ],
+                "presets": [
+    "images/preset1.jpg",
+    "images/preset2.jpg",
+    "images/preset3.jpg",
+    "images/preset4.jpg",
+    "images/preset5.jpg"
+]
                 ratings: {
                     "3": { "stars5": 25, "stars4": 40, "stars3": 60 },
                     "4": { "stars5": 80, "stars4": 120, "stars3": 180 },
