@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>AURA SLIDE</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+<body class="loading-state">
+
+    <!-- LOADING SCREEN -->
+    <div id="loader" class="overlay active">
+        <div class="loader-content">
+            <h1 class="logo-glow">AURA</h1>
+            <p class="loader-text">LOADING ENGINE...</p>
+        </div>
+    </div>
+
+    <!-- HOME SCREEN -->
+    <main id="screen-home" class="screen hidden">
+        <header class="glass-nav">
+            <button class="icon-btn" onclick="UI.nav('info')">i</button>
+            <div class="brand">AURA SLIDE</div>
+            <button class="icon-btn" onclick="UI.nav('dashboard')">STATS</button>
+        </header>
+
+        <div class="home-grid">
+            <div class="preview-panel">
+                <div class="glass card-preview">
+                    <div id="img-preview-container" class="preview-img"></div>
+                    <div class="preview-label" id="lbl-size">4 × 4</div>
+                </div>
+            </div>
+
+            <div class="settings-panel">
+                <div class="glass setting-card">
+                    <h3>Grid Density</h3>
+                    <div class="chip-group" id="size-options">
+                        <button class="chip active" data-val="3">3x3</button>
+                        <button class="chip" data-val="4">4x4</button>
+                        <button class="chip" data-val="5">5x5</button>
+                        <button class="chip" data-val="7">7x7</button>
+                    </div>
+                </div>
+
+                <div class="glass setting-card">
+                    <h3>Appearance</h3>
+                    <div class="chip-group" id="mode-options">
+                        <button class="chip active" data-val="numbers">NUMBERS</button>
+                        <button class="chip" data-val="photo">PHOTO</button>
+                    </div>
+                </div>
+
+                <div id="photo-picker" class="glass setting-card hidden">
+                    <h3>Preset Gallery</h3>
+                    <div class="selector">
+                        <button class="nav-arrow" onclick="Core.changePreset(-1)">&#10094;</button>
+                        <span id="preset-name">PRESET 01</span>
+                        <button class="nav-arrow" onclick="Core.changePreset(1)">&#10095;</button>
+                    </div>
+                </div>
+
+                <button class="btn-play" onclick="Core.launchGame()">START SESSION</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- GAME SCREEN -->
+    <section id="screen-game" class="screen hidden">
+        <div class="hud glass">
+            <div class="hud-stat">
+                <span class="hud-label">MOVES</span>
+                <span id="val-moves" class="hud-val">0</span>
+            </div>
+            <div class="hud-stat">
+                <span class="hud-label">TIME</span>
+                <span id="val-time" class="hud-val">00:00</span>
+            </div>
+            <div class="hud-actions">
+                <button class="action-btn" onclick="Core.resetGame()">&#8634;</button>
+                <button class="action-btn" onclick="UI.nav('home')">&#10005;</button>
+            </div>
+        </div>
+        <div id="board-viewport"></div>
+    </section>
+
+    <!-- WIN POPUP -->
+    <div id="win-overlay" class="overlay hidden">
+        <div class="glass win-card">
+            <h2 class="gold-text">COMPLETED</h2>
+            <div id="win-canvas-wrap"></div>
+            <div class="win-stats">
+                <div id="win-stars">★★★★★</div>
+                <p id="win-perf-text">MASTERFUL PERFORMANCE</p>
+                <div class="win-data-row">
+                    <span>MOVES: <b id="res-moves">0</b></span>
+                    <span>TIME: <b id="res-time">00:00</b></span>
+                </div>
+            </div>
+            <div class="win-btns">
+                <button class="btn-glass" onclick="UI.nav('home')">MENU</button>
+                <button class="btn-solid" onclick="UI.share()">SHARE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="js/storage.js"></script>
+    <script src="js/engine.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/core.js"></script>
+</body>
+</html>
