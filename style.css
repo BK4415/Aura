@@ -205,3 +205,45 @@ img, .tile, .image-preview {
     font-size: 12px;
     animation: loadingText 1.5s infinite;
 }
+
+#win-popup .popup-card {
+    width: 90%;
+    max-width: 400px;
+    padding: 40px 20px;
+    text-align: center;
+    transform: scale(0.8);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#win-popup:not(.hidden) .popup-card {
+    transform: scale(1);
+}
+
+.snapshot-container {
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+    overflow: hidden;
+    border-radius: 12px;
+    background: rgba(0,0,0,0.3);
+}
+
+.stars {
+    color: #ffd700;
+    font-size: 32px;
+    letter-spacing: 5px;
+    margin-bottom: 10px;
+}
+
+.badge {
+    background: linear-gradient(45deg, #ff0055, #ffcc00);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 10px;
+}
