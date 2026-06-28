@@ -83,3 +83,40 @@ body {
 @media (max-width: 800px) {
     .home-grid { grid-template-columns: 1fr; padding: 20px; gap: 20px; overflow-y: auto; }
 }
+
+/* Progress Bar Styles */
+.progress-container {
+    width: 200px;
+    height: 2px;
+    background: rgba(255,255,255,0.1);
+    margin: 20px auto;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+#progress-bar {
+    width: 0%;
+    height: 100%;
+    background: var(--accent);
+    box-shadow: 0 0 15px var(--accent);
+    transition: width 0.4s ease;
+}
+
+.loading-state #loader {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Smooth fade out when finished */
+#loader.fade-out {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+@keyframes pulse { 
+    0% { opacity: 0.5; transform: scale(0.98); } 
+    50% { opacity: 1; transform: scale(1); } 
+    100% { opacity: 0.5; transform: scale(0.98); } 
+                }
