@@ -104,3 +104,21 @@ const App = {
 
 const engine = new SlidingEngine('game-board-container');
 window.onload = () => App.init();
+
+UI.showDashboard = function() {
+    this.showPage('dashboard');
+    const container = document.getElementById('dashboard-stats');
+    container.innerHTML = '';
+    
+    [3, 4, 5, 7].forEach(size => {
+        const stats = JSON.parse(localStorage.getItem(`aura_stats_${size}`)) || { moves: '--', time: '--' };
+        const row = document.createElement('div');
+        row.className = 'stats-row glass';
+        row.innerHTML = `
+            <div class="size-tag">${size}x${size}</div>
+            <div class="stat-item"><span>Best Moves:</span> <strong>${stats.moves}</strong></div>
+            <div class="stat-item"><span>Best Time:</span> <strong>${stats.time === '--' ? '--' : Math.floor(stats.time/60)+':'+(stats.time%60).toString().padStart(2,'0')}</strong></div>
+        `;
+        container.appendChild(row);
+    });
+};
