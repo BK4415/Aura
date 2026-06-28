@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aura Slide | Premium Puzzle</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0a0a0a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+</head>
+<body class="loading-active">
+
+    <!-- LOADING SCREEN -->
+    <div id="loading-screen" class="overlay active">
+        <div class="logo-container">
+            <div class="logo-glow"></div>
+            <div class="logo-text">AURA</div>
+        </div>
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+        <p class="loading-status">INITIALIZING ENGINE</p>
+    </div>
+
+    <!-- MAIN HOME UI -->
+    <main id="home-screen" class="page hidden">
+        <header class="glass-header">
+            <button class="icon-btn" onclick="UI.showPage('info')"><svg viewBox="0 0 24 24"><path d="M11 17h2v-6h-2v6zm1-15C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 9h2V7h-2v2z"/></svg></button>
+            <h1 class="premium-title">AURA SLIDE</h1>
+            <button class="icon-btn" onclick="UI.showPage('dashboard')"><svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg></button>
+        </header>
+
+        <div class="home-layout">
+            <!-- LEFT: PREVIEW -->
+            <section class="preview-section">
+                <div class="preview-card glass">
+                    <div id="live-preview" class="image-preview"></div>
+                    <div class="preview-overlay">
+                        <span id="preview-size-label">4x4</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RIGHT: SETTINGS -->
+            <section class="settings-section">
+                <div class="settings-grid">
+                    <div class="setting-group glass">
+                        <h3>Grid Size</h3>
+                        <div class="chip-container" id="size-chips">
+                            <button class="chip active" data-size="3">3x3</button>
+                            <button class="chip" data-size="4">4x4</button>
+                            <button class="chip" data-size="5">5x5</button>
+                            <button class="chip" data-size="7">7x7</button>
+                        </div>
+                    </div>
+
+                    <div class="setting-group glass">
+                        <h3>Game Mode</h3>
+                        <div class="chip-container" id="mode-chips">
+                            <button class="chip active" data-mode="numbers">Numbers</button>
+                            <button class="chip" data-mode="photo">Photo</button>
+                        </div>
+                    </div>
+
+                    <div id="photo-selector" class="setting-group glass hidden">
+                        <h3>Select Image</h3>
+                        <div class="selector-nav">
+                            <button class="nav-btn" onclick="App.prevImage()">&#10094;</button>
+                            <span id="image-index-label">Preset 1</span>
+                            <button class="nav-btn" onclick="App.nextImage()">&#10095;</button>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary" onclick="App.startGame()">
+                        <span>START PUZZLE</span>
+                        <div class="btn-glow"></div>
+                    </button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- GAME SCREEN -->
+    <div id="game-screen" class="page hidden">
+        <div class="game-hud glass">
+            <div class="stat">
+                <span class="label">MOVES</span>
+                <span id="move-count" class="value">0</span>
+            </div>
+            <div class="stat">
+                <span class="label">TIME</span>
+                <span id="timer" class="value">00:00</span>
+            </div>
+            <div class="game-controls">
+                <button class="icon-btn" onclick="App.togglePause()"><svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg></button>
+                <button class="icon-btn" onclick="App.restartGame()"><svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></button>
+                <button class="icon-btn" onclick="UI.showHome()"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></button>
+            </div>
+        </div>
+        
+        <div id="game-board-container">
+            <!-- The SlidingEngine will inject the board here -->
+        </div>
+    </div>
+
+    <!-- WIN POPUP -->
+    <div id="win-popup" class="overlay hidden">
+        <div class="popup-card glass animate-pop">
+            <h2 class="congrats-text">CONGRATULATIONS!</h2>
+            <div id="solved-snapshot" class="snapshot-container"></div>
+            
+            <div class="stats-row">
+                <div class="stat-box">
+                    <span class="label">MOVES</span>
+                    <span id="win-moves" class="value">--</span>
+                </div>
+                <div class="stat-box">
+                    <span class="label">TIME</span>
+                    <span id="win-time" class="value">--</span>
+                </div>
+            </div>
+
+            <div class="rating-container">
+                <div id="star-rating" class="stars"></div>
+                <span id="performance-label">EXCELLENT!</span>
+            </div>
+
+            <div id="new-record-badge" class="badge hidden">NEW RECORD</div>
+
+            <div class="popup-btns">
+                <button class="btn-secondary" onclick="UI.showHome()">HOME</button>
+                <button class="btn-primary" onclick="App.startGame()">PLAY AGAIN</button>
+                <button class="btn-share" onclick="App.shareResult()">SHARE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- INFO PAGE -->
+    <div id="info-page" class="page hidden">
+        <header class="glass-header">
+            <button class="icon-btn" onclick="UI.showHome()"><svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button>
+            <h1>INFORMATION</h1>
+        </header>
+        <div class="content-scroll glass-scroll">
+            <section class="info-block">
+                <h3>How to Play</h3>
+                <p>Slide the tiles into the empty space to arrange them in sequential order (top-left to bottom-right). Use the image mode for a visual challenge!</p>
+            </section>
+            <section class="info-block">
+                <h3>Ratings</h3>
+                <p>Ratings are calculated based on your total move count. 3x3 is the easiest, 7x7 is for masters.</p>
+            </section>
+            <section class="info-block">
+                <h3>Version</h3>
+                <p>Aura Slide v1.0.0 (Premium)</p>
+            </section>
+            <section class="info-block">
+                <h3>Privacy</h3>
+                <p>Aura Slide is an offline-first game. No personal data is collected or transmitted.</p>
+            </section>
+        </div>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js');
+            });
+        }
+    </script>
+</body>
+</html>
